@@ -4,15 +4,15 @@ In this page you install the plugin, pick which models pstack uses, and run your
 
 ## Install the plugin
 
-In a Cursor chat, run:
+In Antigravity, pstack is installed locally in `~/.gemini/config/plugins/pstack`.
 
 ```text
 /add-plugin pstack
 ```
 
-Cursor confirms the plugin is installed.
+The plugin is discovered and active.
 
-In Claude Code, run `/plugin marketplace add cursor/plugins`, then `/plugin install pstack@cursor-plugins`. Claude Code prefixes plugin commands, so each command in this guide takes a `pstack:` prefix there, such as `/pstack:setup-pstack`, which writes its model rule to `~/.claude/rules/pstack-models.md`. The [Claude Code adapter](../harness/claude-code.md) covers the other differences.
+See the [Antigravity adapter](../harness/antigravity.md) for tool mappings, model roles, and path conventions.
 
 ## Pick your models
 
@@ -22,9 +22,9 @@ Run:
 /setup-pstack
 ```
 
-[`/setup-pstack`](../../skills/setup-pstack/SKILL.md) detects the models you have access to, asks for a reasoning budget, shows you each role (code delegates, judgment, the review panels), and asks what you want. Answer the questions. It writes `~/.cursor/rules/pstack-models.mdc`, a small rule every pstack skill reads.
+[`/setup-pstack`](../../skills/setup-pstack/SKILL.md) detects the models you have access to, asks for a reasoning budget, shows you each role (code delegates, judgment, the review panels), and asks what you want. Answer the questions. It writes `~/.gemini/config/rules/pstack-models.md`, a small rule every pstack skill reads.
 
-The defaults run at `xhigh` reasoning, the same as the `large` budget. `unlimited` lifts each model to its highest tier, up to `max`. Opus goes to `max`. Grok tops out at `xhigh`, so it stays there. `medium` and `small` lower the reasoning and spend fewer tokens.
+The default budget runs `pro` for architecture and judgment, and `flash` for execution delegates. `medium` uses `flash` across the board, and `small` lowers routine delegates to `flash_lite`.
 
 You only override what you care about. A role with no line in the rule keeps the skill's default. To restore a default, delete that role's line. A rerun of `/setup-pstack` keeps any role whose model differs from the default. When a default changes, a rule written before the change still pins the old default, so delete those role lines, or delete the file, then run `/setup-pstack` again.
 
@@ -34,7 +34,7 @@ You might be wondering what happens if you use Auto. Set a role to `inherit-pare
 
 At the end of setup, `/setup-pstack` looks for a way to prove app behavior in your project, either a `verify-*` skill or an existing harness. If it finds neither, it offers once to generate one with [`/create-verification-skill`](../../skills/create-verification-skill/SKILL.md).
 
-Say yes and it writes `.cursor/skills/verify-<app>/`, a project-local skill that teaches agents to drive your app the way a user does. It proves the skill works once before handing it over. Say no and setup moves on. You can run `/create-verification-skill` yourself any time. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers it in depth.
+Say yes and it writes `.agents/skills/verify-<app>/`, a project-local skill that teaches agents to drive your app the way a user does. It proves the skill works once before handing it over. Say no and setup moves on. You can run `/create-verification-skill` yourself any time. [Verify and ship](./06-verify-and-ship.md#create-a-project-verification-skill) covers it in depth.
 
 If you're new to pstack, say yes. An agent that can check its own work keeps going until the check passes. An agent that can't hands every result back to you to check by hand. Of everything in this guide, the verification skill pays off the most.
 
@@ -61,6 +61,6 @@ Pick something real but small, and describe it the way you'd describe it to a co
 
 Watch the todo list. Its first items are the matched playbook's steps copied in, the Feature playbook for this prompt. If `/poteto-mode` skips a step, the step stays in the list with `skip: <reason>`, so you can see what it chose not to do.
 
-From here you can type normal follow-ups. To keep `/poteto-mode` on for the whole chat, pick it from the `/` menu with Option+Enter (Mac) or Alt+Enter (Windows) instead of Enter. That makes it a [Custom Mode](https://cursor.com/docs/skills#using-a-skill-as-a-custom-mode), which stays in context on every turn until you exit it. Custom Modes are available in the Agents Window and the CLI. Plain Enter attaches the skill to one message, and it fades as the chat moves on.
+From here you can type normal follow-ups. Invoke `/poteto-mode` at the start of any complex task to ground execution in proven playbooks.
 
 Next: [Route work through `/poteto-mode`](./02-poteto-mode.md).

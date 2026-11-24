@@ -69,9 +69,9 @@ elif raw=$(gh pr list --author "@me" --state all --limit 1000 \
 fi
 [ -s "$prs" ] || echo "[]" > "$prs"
 
-# Transcripts dir: ~/.cursor/projects/<slugified-repo-path>/agent-transcripts.
+# Transcripts dir: ~/.gemini/antigravity-cli/brain.
 slug=$(printf '%s' "$main_wt" | sed 's#^/##; s#/#-#g')
-transcripts="$HOME/.cursor/projects/$slug/agent-transcripts"
+transcripts="$HOME/.gemini/antigravity-cli/brain"
 now=$(date +%s)
 
 echo "# base: $base"

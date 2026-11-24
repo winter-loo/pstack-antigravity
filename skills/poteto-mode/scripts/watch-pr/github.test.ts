@@ -263,7 +263,7 @@ it("annotates Bugbot threads with distinct review-pass counts", () => {
                       createdAt: "now",
                       path: null,
                       line: null,
-                      author: { login: "cursor" },
+                      author: { login: "automation-bot" },
                     },
                   ],
                 },
@@ -308,7 +308,7 @@ describe("review thread pagination", () => {
     resolved,
   });
 
-  it("keeps walking pages until the cursor is exhausted", async () => {
+  it("keeps walking pages until pagination is exhausted", async () => {
     const reader = fakeReader({
       threadPages: [
         { threads: [thread("one")], endCursor: "next" },
@@ -336,7 +336,7 @@ describe("review thread pagination", () => {
     expect(threads.map((item) => item.id)).toEqual(["late"]);
   });
 
-  it("stops after a single page when the cursor is exhausted", async () => {
+  it("stops after a single page when pagination is exhausted", async () => {
     const reader = fakeReader({
       threadPages: [{ threads: [thread("only")], endCursor: null }],
     });

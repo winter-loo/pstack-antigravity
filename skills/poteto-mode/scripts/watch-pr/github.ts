@@ -331,22 +331,22 @@ function isBugbot(comment: T.ReviewComment | null): boolean {
   const author = (comment.authorLogin ?? "").toLowerCase();
   const body = comment.body.toLowerCase();
   return (
-    author.includes("bugbot") ||
-    (author === "cursor" &&
-      [
-        "bugbot",
-        "cursor_automation_id",
-        "agentic security review",
-        "description start",
-        "severity",
-      ].some((token) => body.includes(token)))
+    author.includes("bot") ||
+    author.includes("review") ||
+    [
+      "review bot",
+      "automation_id",
+      "agentic security review",
+      "description start",
+      "severity",
+    ].some((token) => body.includes(token))
   );
 }
 function passKey(comment: T.ReviewComment | null): string | null {
   if (comment === null) return null;
   for (const pattern of [
     /RUN_ID:\s*([a-zA-Z0-9_.:-]+)/,
-    /CURSOR_AUTOMATION_ID:\s*([a-zA-Z0-9_.:-]+)/,
+    /(?:CURSOR_)?AUTOMATION_ID:\s*([a-zA-Z0-9_.:-]+)/,
   ]) {
     const match = pattern.exec(comment.body);
     if (match?.[1]) return match[1];
@@ -377,11 +377,11 @@ export function parseReviewThreadPage(value: unknown): T.ReviewThreadPage {
   const page = record(reviewThreads.pageInfo, "reviewThreads.pageInfo");
   if (typeof page.hasNextPage !== "boolean")
     missing("reviewThreads.pageInfo.hasNextPage", page.hasNextPage);
-  const cursor = optionalString(
+  const pageCursor = optionalString(
     page.endCursor,
     "reviewThreads.pageInfo.endCursor"
   );
-  return { threads, endCursor: page.hasNextPage && cursor ? cursor : null };
+  return { threads, endCursor: page.hasNextPage && pageCursor ? pageCursor : null };
 }
 export function buildReviewThreads(
   threads: readonly T.RawReviewThread[]
@@ -570,11 +570,11 @@ export class GhGitHubReader implements T.GitHubReader {
     const page = record(contexts.pageInfo, "contexts.pageInfo");
     if (typeof page.hasNextPage !== "boolean")
       missing("contexts.pageInfo.hasNextPage", page.hasNextPage);
-    const cursor = optionalString(
+    const pageCursor = optionalString(
       page.endCursor,
       "contexts.pageInfo.endCursor"
     );
-    return { checks, endCursor: page.hasNextPage && cursor ? cursor : null };
+    return { checks, endCursor: page.hasNextPage && pageCursor ? pageCursor : null };
   }
   async reviewThreadPage(
     context: T.PrContext,
