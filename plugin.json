@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "pstack",
-  "version": "0.15.36",
+  "version": "0.15.48",
   "description": "If you want to go fast, go deep first. pstack helps you write less, but higher quality code. Rigorous Antigravity agent workflows you can parallelize with confidence.",
   "author": {
     "name": "Lauren Tan"

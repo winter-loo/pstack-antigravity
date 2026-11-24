@@ -14,18 +14,18 @@ Every candidate gets the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric, 3-6 concrete gradeable criteria for what success looks like on *this* task. It is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Use the `arena runners` line in `~/.gemini/config/rules/pstack-models.md`. If the rule or that line is missing, default to one each on `pro` and `flash`. An `inherit` or `auto` entry means the parent session model. Spawn runners via `invoke_subagent`. If dropped seats leave fewer than two runners, add runners until there are two. Spawn more runners when the arena covers multiple design directions.
-4. Give each candidate its own output location (a git worktree where possible, otherwise `/var/tmp/arena-<slug>/candidate-<n>/`), per the **separate-before-serializing-shared-state** principle skill.
+3. Pick the runners from the `arena runners` line in `~/.gemini/config/rules/pstack-models.md`, by default `pro` and `flash`. An `auto` or `inherit` entry runs on the parent model (`Model: "inherit"`). Spawn runners via `invoke_subagent`, keeping at least two runners. Spawn more for multiple design directions, and repeat one model when the work is generation-bound, not judgment-sensitive.
+4. Give each candidate its own output location (a git worktree where possible, otherwise `/var/var/tmp/arena-<slug>/candidate-<n>/`), per the **separate-before-serializing-shared-state** principle skill.
 
 ## Phase B: Fan out
 
-Spawn all N subagents in one message, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected.
+Spawn all N subagents in one message with `run_in_background: true`, each with the task, the path to the shared grounding, its own output path, and instructions to produce the artifact and a short rationale naming the alternatives it considered and what it rejected.
 
 If a candidate produces no output, proceed with N-1 and note the dropout.
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, choose one model from the `arena cross-judge pool` line in `~/.gemini/config/rules/pstack-models.md`. If the rule or that line is missing, choose from `pro` and `flash`. Spawn one readonly judge subagent. The judge sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with your reading in Phase D. Don't spawn it while candidates are still writing.
+After all Phase B candidates complete, spawn one readonly judge from the `arena cross-judge pool` line in `~/.gemini/config/rules/pstack-models.md`, by default `pro` and `flash`. Pick a tier different from the parent where possible, or `pro` by default. While you read in Phase D, the judge scores each candidate, by path label, on each rubric criterion and recommends a base.
 
 ## Phase D: Pick a base
 

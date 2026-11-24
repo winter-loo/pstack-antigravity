@@ -21,6 +21,7 @@ pstack is a complete engineering suite designed to turn Antigravity into a rigor
 - **Understanding & Architecture**:
   - [`/how`](../how/SKILL.md): Subsystem architecture walkthrough and runtime flow.
   - [`/why`](../why/SKILL.md): Deep dive into motivations, historical commits, and MCP evidence.
+  - [`/reframe`](../reframe/SKILL.md): Learn the expert terminology and neighboring-field framing for what you are building.
   - [`/architect`](../architect/SKILL.md): Multi-candidate interface and module sketch before coding.
   - [`/arena`](../arena/SKILL.md): Parallel solution bake-off with cross-judging and component grafting.
 
